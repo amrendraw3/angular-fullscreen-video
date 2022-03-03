@@ -1,65 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import * as $ from 'jquery';
+import { Component, OnInit,ElementRef,ViewChild,Input } from '@angular/core';
 import videojs from 'video.js';
-
-
-
-interface documents extends Document {
-	fullscreenElement: any;
-	mozFullscreenElement: any;
-	webkitFullscreenElement: any;
-	msFullscreenElement: any
-}
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
+
 export class HomeComponent implements OnInit {
-  muted:boolean = false
-  player: videojs.Player;
-  constructor() { }
+	muted:boolean = true;
+	
+	isMobileWidth = false;
+	@Input() options: {
+		mute: false,
+		fluid: boolean,
+		aspectRatio: string,
+		autoplay: boolean,
+		sources: {
+			src: string,
+			type: string,
+			controls: false,
+		}[],
+	};
+	
+player: videojs.Player;
+@ViewChild('targetWeb', {static: true}) targetWeb: ElementRef;
+@ViewChild('targetMobile', {static: true}) targetMobile: ElementRef;
+constructor() { }
 
-  ngOnInit(): void {
-    let fsdDocument = <documents>document
-		$(fsdDocument).bind('fullscreenchange webkitfullscreenchange mozfullscreenchange msfullscreenchange', function (e) {
-			var fullscreenElement = fsdDocument.fullscreenElement || fsdDocument.webkitFullscreenElement || fsdDocument.mozFullscreenElement || fsdDocument.msFullscreenElement;
-
-			if (!fullscreenElement) {
-				// Leaving full-screen mode...
-				const elem: any = document.getElementById("myvideo");
-				elem.pause();
-			} else {
-				// Entering full-screen mode..
-			}
+ngOnInit(): void {
+	setTimeout(() => {
+		if (this.isMobileWidth) {
+		this.player = videojs(this.targetMobile.nativeElement, this.options, function onPlayerReady() {
+			console.log('onPlayerReady', this);
 		});
-	}
-
-	volumeBtn(){
-		const elem: any = document.getElementById("full-video");
-		elem.muted= !elem.muted;
-		this.muted = !this.muted;
-	  }
-
-  ngOnDestroy() {
-    // destroy player
-    if (this.player) {
-      this.player.dispose();
-    }
-  }
-	playVideo() {
-		const elem: any = document.getElementById("myvideo");
-		elem.currentTime = 0;
-		elem.play();
-
-		if (elem.requestFullscreen) {
-			elem.requestFullscreen();
-		} else if (elem.webkitRequestFullscreen) { /* Safari */
-			elem.webkitRequestFullscreen();
-		} else if (elem.msRequestFullscreen) { /* IE11 */
-			elem.msRequestFullscreen();
+		} else {
+		this.player = videojs(this.targetWeb.nativeElement, this.options, function onPlayerReady() {
+			console.log('onPlayerReady', this);
+		});
 		}
-  }
+	})
+}
 
+volumeBtn(){
+	this.muted = !this.muted;
+	console.log('this.muted: ', this.muted)
+	// alert(this.muted);
+	this.player.muted(this.muted);
+  }
 }

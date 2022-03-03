@@ -1,46 +1,20 @@
 <section class="super-parent">
 	<div class="video">
-		<video id="full-video" class="video-desktop" autoplay loop onloadedmetadata="this.muted = true"
-			poster="assets/images/hero-new.png">
+		<video id="desktop-video" controls #targetWeb class="video-desktop" [muted]="'muted'" autoplay="autoplay" muted
+			loop playsinline>
 			<source src="https://superone3.s3.eu-west-2.amazonaws.com/web/videos/superone-trailer.mp4" type="video/mp4">
 		</video>
 
-		<video id="full-video" class="video-mobile" autoplay loop onloadedmetadata="this.muted = true"
-			poster="assets/images/hero-new.png">
+		<video id="mobile-video" #targetMobile class="video-mobile" [muted]="'muted'" autoplay="autoplay" muted loop
+			playsinline>
 			<source src="https://superone3.s3.eu-west-2.amazonaws.com/web/videos/superone-trailer-mobile.mp4"
 				type="video/mp4">
 		</video>
-
-
-		<!-- <video loop="" poster="assets/images/hero-new.png" playsinline="" preload="auto" src="https://superone3.s3.eu-west-2.amazonaws.com/web/videos/superone-trailer.mp4"></video> -->
-
-
 	</div>
-	<div class="hero">
-		<div class="">
-			<div class="mid-content-parent">
-				<div class="mid-content">
-					<div class="row">
-						<div class="col-xl-6">
-							<div class="volume-btn">
-								<i *ngIf="!muted" class="fa fa-volume-off text-white" aria-hidden="true"
-									(click)="volumeBtn()"></i>
-								<i *ngIf="muted" class="fa fa-volume-up text-white" aria-hidden="true"
-									(click)="volumeBtn()"></i>
-							</div>
-						</div>
-
-					</div>
-				</div>
+		<div class="volume-btn">
+			<div class="container">
+				<i *ngIf="muted" class="fa fa-volume-off text-white" aria-hidden="true" (click)="volumeBtn()"></i>
+				<i *ngIf="!muted" class="fa fa-volume-up text-white" aria-hidden="true" (click)="volumeBtn()"></i>
 			</div>
 		</div>
-
-
-
-
-
-		<!-- <app-footer></app-footer> -->
-
-		<video width="0%" controls id="myvideo" class="position-absolute">
-			<source src="https://superone3.s3.eu-west-2.amazonaws.com/nft-store/NFT+Trailer.mp4">
-		</video>
+</section>
